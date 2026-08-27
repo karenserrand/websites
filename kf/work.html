@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work — Karen François</title>
+
+
+    
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=EB+Garamond:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+
+
+
+           :root {
+            --bg: #ffffff;
+            --ink: #000000;
+            --grey-text: #717482;
+            --dim: #e0e0e0; 
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-size: 13.6px;
+            line-height: 19.0px;
+            font-family: "Inter", sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* HEADER NAV */
+        .main_menu {
+            padding: 24px 30px;
+            position: absolute;
+        
+            width: 100%;
+            z-index: 13;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            box-sizing: border-box;
+        }
+        .main_menu .main-nav { list-style: none; display: flex; gap: 32px; padding: 0; margin: 0; }
+        .main_menu .main-nav li a {
+           color: var(--ink);
+            text-decoration: none;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .main_menu .main-nav li a:hover, .main_menu .main-nav li a.active { opacity: 1; }
+
+        /* THE SUBMENU (SIDEBAR FILTERS) */
+        .project_submenu {
+            padding-left: calc(8% + 8.5px);
+            position: absolute;
+            top: 65.0px;
+            z-index: 10;
+            width: 100%;
+        }
+        .project_categories ul { list-style: none; padding: 0; margin: 0; }
+        .project_categories ul li { display: inline-block; margin-right: 22.0px; font-size: 11px; text-transform: uppercase; }
+        .project_categories ul li a { cursor: pointer; color: #717482; opacity: 0.5; }
+        .project_categories ul li.active a { opacity: 1; font-weight: bold; }
+
+        /* ARCHIVE GRID SYSTEM */
+        .overview_section { width: 100%; height: 100%; }
+        .overview_projects_container { padding: 92.0px 6.5px; }
+        .overview_projects_list { max-width: 100%; margin: 0 auto; }
+
+        .year_group { margin-bottom: 30px; width: 100%; }
+        .year_label {
+            padding: 2.0px 10px 2.5px 10px;
+            font-size: 10.5px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+
+        /* 8-COLUMN GRID  */
+        .year_project_list {
+            display: flex;
+            flex-wrap: wrap;
+            padding-bottom: 1.5625vw;
+        }
+
+        .overview_project {
+            width: 12.5%; /* 8 items per row on desktop */
+            padding: 0 4px;
+            margin-bottom: 15px;
+            transition: opacity 0.3s;
+        }
+
+        .overview_project_image_div {
+            aspect-ratio: 300 / 300;
+            background-size: cover;
+            background-position: center;
+            background-color: #f7f7f7;
+            width: 100%;
+        }
+
+        .overview_project_title { padding: 5.0px 0; }
+        .overview_project_title label {
+            display: block;
+            line-height: 16.0px;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+        .client-label { opacity: 0.6; }
+
+         #project-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100vh;
+            background: #ffffff;
+            z-index: 3000;
+            display: none; /* Hidden by default */
+             overflow-y: auto;
+              overflow-x: hidden;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    padding: 80px 40px 120px 40px; 
+        }
+
+        .overlay-close {
+            position: fixed; top: 30px; left: 30px;
+            font-size: 11px; text-transform: uppercase;
+           cursor: pointer; z-index: 3001;
+        }
+
+        .overlay-content { max-width: 1200px; margin: 0 auto; }
+
+        .overlay-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 40px;
+            margin-bottom: 50px;
+        }
+
+        .overlay-title {
+            font-family: "EB Garamond", serif;
+            font-size: 42px;
+            line-height: 1.05;
+            grid-column: span 2; 
+            letter-spacing: -0.01em;
+            
+        }
+
+        .overlay-meta, .detail-info { 
+            font-size: 12px; 
+            line-height: 1.7; 
+            color: #717482; }
+        .overlay-meta b, .detail-info strong  { 
+            color: #000; 
+            text-transform: uppercase; 
+            font-size: 10px; 
+            letter-spacing: 1.2px; 
+            display: block; 
+            margin-bottom: 6px; }
+
+        .overlay-image { width: 80%; height: auto; display: block; margin-top: 20px; }
+
+           #info-section { 
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff; /* Pure white background like Alexis */
+            z-index: 900; /* Sits below Nav but above Work */
+            padding: 40px 45px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        #info-section.active {
+            display: block;
+        }
+
+        .info-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; 
+            gap: 60px; 
+            align-items: start;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 40px;
+            display: inline-block;
+            border-bottom: 1px solid black;
+        }
+        
+        .slideshow-container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+}
+.slideshow-container img,
+.slideshow-container video {
+    width: 100%;
+    height: auto;
+    object-fit: contain;;
+    display: none;
+}
+.slideshow-container img.active,
+.slideshow-container video.active {
+    display: block;
+}
+.slide-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 32px;
+    cursor: pointer;
+    color: #000;
+    background: rgba(255,255,255,0.7);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20%;
+    user-select: none;
+}
+.slide-prev { left: -40px; }
+.slide-next { right: -40px; }
+.slide-dots {
+    
+    margin-top: 30px;
+}
+.slide-dots span {
+    transition: background 0.3s;
+    width: 5px;
+    height: 5px;
+    background: #ddd;
+    border-radius: 50%;
+    margin: 0 4px;
+    cursor: pointer;
+}
+.slide-dots span.active { background: #000; }
+
+        /* MOBILE ADJUSTMENTS */
+        @media screen and (max-width: 768px) {
+            .overview_project { width: 33.33%; } /* 3 per row on tablet */
+            .logo { bottom: 40px; top: auto; transform: none; font-size: 16px; }
+            .logo span:first-child { padding-right: 20px; }
+            .logo span:last-child { padding-left: 20px; }
+            .project_submenu { padding-left: 15px; }
+        }
+
+        @media screen and (max-width: 480px) {
+            .overview_project { width: 50%; } /* 2 per row on mobile */
+        }
+          @media screen and (max-width: 1024px) { .overview_project { width: 25%; } }
+        @media screen and (max-width: 768px) {
+            .overview_project { width: 33.33%; }
+            .overlay-header { grid-template-columns: 1fr; }
+            .overlay-title { font-size: 32px; }
+        }
+        @media screen and (max-width: 480px) { .overview_project { width: 50%; } }
+
+           /* --- DECORATIVE & FOOTER --- */
+        .bottom-icon-container { position: fixed; bottom: 720px; right: 200px; width: 180px;  height: 200px; z-index: 20; background: transparent;
+            }
+
+         .bottom-icon-container iframe { width: 440%; height: 770%; border: none; overflow: hidden;
+        }    
+        .footer-left { bottom: 2vh; left: 30px; font-size: 10px; color: #bbb; letter-spacing: 0.1em; }
+
+    </style>
+</head>
+<body>
+
+     <!-- OVERLAY CONTAINER (Fills via JS) -->
+    <div id="project-overlay">
+        <div class="overlay-close" onclick="closeProject()">← Back</div>
+        
+            <div class="overlay-header">
+                <div class="overlay-title" id="ov-title">Project Title</div>
+                <div class="overlay-meta">
+                   <br> <strong>Role</strong> <br> <span id="ov-role">Producer</span> 
+                     </div>
+                 <div class="detail-info">
+                    <strong>Description</strong> <br> <span id="ov-meta">Metadata details</span>
+                </div>
+                </div>
+    
+            <div class="slideshow-container">
+    <div id="ov-slides"></div>
+    <div class="slide-arrow slide-prev" onclick="changeSlide(-1)">‹</div>
+    <div class="slide-arrow slide-next" onclick="changeSlide(1)">›</div>
+    <div id="slide-dots" class="slide-dots"></div>
+</div>
+        </div>
+    </div>
+
+
+
+    <!-- MAIN MENU -->
+    <header class="main_menu">
+        <ul class="main-nav">
+            <li><a href="home.html">home</a></li>
+           
+            
+            
+            
+        </ul>
+    </header>
+
+    <!-- ARCHIVE FILTERS -->
+    <div class="project_submenu">
+        <div class="project_categories">
+            <ul id="filters">
+                <li data-slug="all" class="active"><a>all</a></li>
+                <li data-slug="Brand" ><a>Brand</a></li>
+                <li data-slug="Talent" ><a>Talent</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SECTION: INFO OVERLAY -->
+    <section id="info-section" class="website_section">
+        <div class="close-btn" onclick="closeInfo()">Close</div> <br>
+        <div class="info-grid">
+            <div class="info-body" style="font-family: 'EB Garamond'; font-size: 15px; line-height: 1.1; text-align: justify; ">
+               <br><br><br><br><br>
+                 Karen makes ideas operational;<br><br> She is the multidisciplinary builder bringing people, ideas, resources, and systems together to make things happen. With over eight years of entrepreneurial experience and deep cultural intelligence, she understands that creative work doesn't exist in a vacuum—it requires infrastructure, people, money, logistics, relationships, timing, and strategy.
+ <br>
+             
+            </div>
+            <div class="info-body-text" style="font-size: 12px; line-height: 1.6; color: var(--ink); text-align: justify;">
+Karen François understands the relationship between creativity and execution. Today, she continues to remain curious about how organizations participate in culture and how culture can change organizations, while supporting brands and talent, connecting multiple disciplines and stakeholders to get the resulting project produced. Her ventures continue to center on building creative ecosystems, developing strategic partnerships, and creating the structures through which emerging cultural practices can grow and connect.
+ — <br><br>
+ÇOIS Agency was a cultural strategy and creative production consultancy helping brands and creative talent navigate cultural markets, understand audiences and create culturally relevant opportunities from 2019-2023. Working across fashion, luxury, lifestyle, media, and the arts, she developed a distinct practice using creativity, art history, cultural research, storytelling, design, music, fashion, and relationships as tools for producing cultural outcomes.
+ <br><br>
+Drawing on her entrepreneurial background and culturally informed approach, Karen is currently developing Digitale Femme, an ecosystem for women and nonbinary artists, designers, and creative practitioners working across digital art, sound, technology, design, and emerging media to find local communities and exchange resources. It supports emerging and self-directed practitioners navigating traditional and nontraditional paths— from recent graduates and independent learners to those entering creative fields later in life, people navigating structural or geographic barriers to creative participation, transitioning from other careers or industries, or rebuilding their practices after major life and professional transitions. The creative infrastructure is about bringing people, ideas, resources, and systems together to make things happen and build sustainable creative lives.
+            <br><br> 
+            Karen practices artistically as Karen Predestin, a multidisciplinary artist and experimental practitioner exploring culture, new forms of expression and connection through technology, memory, identity, curation and new forms of storytelling. She works across 3D fabrication, creative coding, sound, spatial design, photography, video, writing, music, and archival research to develop new ways of preserving, interpreting, and experiencing cultural knowledge. You can find more about her work at <a href=" https://www.karenpredestin.com" class="underline">karenpredestin.com</a> ☺︎ </span>
+                <div class="list-content">
+             
+            <br><br>
+           </span>
+                <div class="list-content">
+                </div>              
+             </div>
+
+
+<!--PIC -->
+<div class="portrait-img"  style="width: 50%; height: 50%;  border-radius: 1px">
+    <div class="portrait-wrapper">
+         </div>  </div>   </div>  <img src="https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/museum.jpeg" class="portrait-img" alt="Karen Portrait">
+                    
+   </div> 
+</div>
+    </section>
+
+    <!-- MAIN OVERVIEW SECTION -->
+    <div class="overview_section">
+        <div class="overview_projects_container">
+            <div class="overview_projects_list">
+
+  <!-- 2026 PROJECTS -->
+                 <div class="year_group">
+                    <div class="year_label"></div>
+                    <div class="year_project_list">
+                    
+                    
+
+ <div class="overview_project all Talent" onclick="openProject('Dear Everyone PFW Dinner', 'Produced and hosted an intimate soirée at Derrière Paris to introduce rising creators and influencers to the global DHL collaboration.', 'VIP Host & Production', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/gettyimages-1381734295-2048x2048.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/gettyimages-1381751858-2048x2048.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/gettyimages-1381743998-2048x2048.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/gettyimages-1381754029-2048x2048.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_34216_4660739.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_34216_4660655.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_34216_4660709.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_34216_4660738.jpg','wl_34216_4660686.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_34216_4660709.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand</label>
+                                <label class="client-label">Veldskoen x DHL Fashion PFW Dinner</label>
+                            </div>
+                        </div>
+
+                        <div class="overview_project all Talent" onclick="openProject('24kGoldn: Fashion Files', 'Coordinated high-profile show attendance and style features for the artist across the US and Europe during fashion month with Highsnobiety and Hypebeast.', 'Talent Relations', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_8950.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screenshot%202023-10-20%20at%2011.23.25%20AM.png','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screenshot%202023-10-20%20at%2011.24.08%20AM.png','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/https___hypebeast.com_image_2022_07_24kgoldn-ss23-shows-style-diary-2022-10.avif'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/https___hypebeast.com_image_2022_07_24kgoldn-ss23-shows-style-diary-2022-8.avif');"></div>
+                            <div class="overview_project_title">
+                                <label>Talent </label>
+                                <label class="client-label">24kGoldn</label>
+                            </div>
+                        </div>
+
+                                  <div class="overview_project all Brand" onclick="openProject('NOID NYFW AW23', 'Managed the full pipeline from venue sourcing, talent buys, and permitting to backstage flow and guest experience show day, for the afterparty, and on market day. Successfully bridged the gap between a digital-native brand and stakeholders/partners to create a physical NYFW event in collaboration with MAC Cosmetics, The Ned, and Dusse Scale: 400 attendees | 55K budget', 'Production and Project Director', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/19_26.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_4778.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/fitting%20final.mp4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/DSCF7204.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_8189.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/NED1.mp4', 'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/gettyimages-1466403272-2048x2048.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/gettyimages-1466407266-2048x2048.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screenshot%202023-10-20%20at%201.22.10%20PM.png','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/NOID%20AW23%201min%20v4.MP4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/16833FBD-950F-496E-8067-1158E3B8F496.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/533145DC-C273-4A90-AC8E-B28E66C9C82C.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/DSCF7204.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand</label>
+                                <label class="client-label"> NOID AW23 NYFW, LA</label>
+                            </div>
+                        </div>
+
+                                                <div class="overview_project all Brand" onclick="openProject('Moloko Art Basel Party Series, Riot Picks', 'Managed luxury brand integrations for the Art Basel party series, at Moloko, securing Casa de Sol as the primary sponsor.', 'Sponsorship Coordinator', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/PHOTO-2022-11-14-13-25-02.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/SaveInsta.App%20-%202933850075777998624.MP4', 'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/91393144_146272066918575_8447831036034683621_n.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/91393144_146272066918575_8447831036034683621_n.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand</label>
+                                <label class="client-label">Partnerships-Production </label>
+                            </div>
+                        </div>
+
+                          <div class="overview_project all Brand" onclick="openProject('Maxhosa Africa SS23 London', 'Strengthened brand presence in the UK market with high-profile attendee support by facilitating guest relations and VIP placement for the premier South African luxury house during London Fashion Week.', 'Talent Relations', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_36883_5108387.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_36883_5108379.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_36883_5108388.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_36883_5108275.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_36883_5108404.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_36883_5108408.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_36883_5108347.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand</label>
+                                <label class="client-label">Maxhosa Africa SS23 London VIPs</label>
+                            </div>
+                        </div>
+
+                        <div class="overview_project all Talent" onclick="openProject('Puma NYFW Spring/Summer 2023','Managed the logistics and interview schedules for high-profile child fashion interviewer and influencer Taylen Biggs, including this collaboration with Puma. Coordinated interviews with designers and backstage access during major NYFW presentations, like Alice + Olivia, Bronx and Banco, Christian Csiriano, etc.', 'Project Management/Backstage Content Producer', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/pumajune.mp4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screenshot%202023-10-23%20at%2010.39.00%20PM.png', 'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/puma1.mp4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/SnapInsta.to_AQMC5NlCusTFEtPNYuUvX2CXELzausdnkmghTv145xghPmHmANOxhzCHJH5z4fJKSbTcMoAF2Gq52c1wQhdv6lho.mp4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/puma1.mp4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_306206264_605831254412871_7890628155211765226_n_1080.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screenshot%202023-10-23%20at%2010.39.00%20PM.png');"></div>
+                            <div class="overview_project_title">
+                                <label> Talent</label>
+                                <label class="client-label"> Taylen Biggs </label>
+                            </div>
+                        </div>
+
+
+                        <div class="overview_project all Brand" onclick="openProject('Johnny Nelson Jewelry', 'Streamlined the partnership between a premier beauty brand and high-end jewelry house for the strategic and visual rollout for the jewelry collaboration, ensuring the brand narrative resonated with luxury consumers. Oui the People, McDonalds, Fifteen Percent','Strategy & Brand Development', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/xlqQP4t6SaG-W0v3fITLYw-thumbnail-1080x1080-100.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/xlqQP4t6SaG-W0v3fITLYw-thumbnail-1080x1080-100.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand</label>
+                                <label class="client-label">Johnny Nelson Jewelry</label>
+                            </div>
+                        </div>
+              
+                         <div class="overview_project all Talent" onclick="openProject('Offset Takes Paris SS22', 'Negotiated high-stakes contracts and managed international logistics to secure Offsets walk in the Balenciaga presentation. Coordinated post show visits to Rick Owens residence, and the Lanvin, Margiela, Dior, Louis Vuitton Ateliers for private meetings with creative directors/design teams', 'Project Manager, Lifestyle/Culture Curator', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screenshot%202023-10-20%20at%2011.24.33%20AM.png','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Offset-at-Balenciaga-Embed04.webp','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Offset-at-Balenciaga-Embed03.webp','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/image05.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/offset1.mp4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/1703f0f9-8167-4dd7-8fa6-1ed3855d1e94.JPG','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_3094.PNG', 'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_3479.HEIC'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/1703f0f9-8167-4dd7-8fa6-1ed3855d1e94.JPG');"></div>
+                            <div class="overview_project_title">
+                                <label>Talent</label>
+                                <label class="client-label">Offset</label>
+                            </div>
+                        </div>
+
+
+                <div class="overview_project all Talent"
+     onclick="openProject(
+       'SS22 #BalmainArmy',
+       'Secured partnership, managed the digital placement and on-site logistics for Rickey Thompson at the Balmain SS22 show and event, Mac sponsorship, along with attendaing Ludovic, Rick Owens, Mugler and other high-profile shows.',
+       'Talent Relations & Event Activation',
+       [
+         'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_308314104_1113035979418540_7170170468384900181_n_1080.jpg',
+         'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_244198884_541783476913808_4314082956313863789_n_1080.jpg',
+         'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_243357079_4188292814632568_7349975589759490678_n_1080.JPG',
+         'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_243529470_921827261754519_3321852784217023548_n_1080.jpg',
+         'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screen%20Shot%202024-12-17%20at%209.31.09%20PM.png'
+       ]
+     )">
+
+  <div class="overview_project_image_div"
+       style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_243529470_921827261754519_3321852784217023548_n_1080.jpg');">
+  </div>
+
+  <div class="overview_project_title">
+    <label>Talent</label>
+    <label class="client-label">Rickey Thompson</label>
+  </div>
+
+</div>
+
+ <div class="overview_project all Brand" onclick="openProject('Romeo Hunte Castings', 'Co-cast the models for the SS2O & AW20 Runway Shows, sourced high profile talent and models to walk the show.','Celebrity & Talent Sourcing , Co-Casting', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/70389302_663361694152041_8598651005802776052_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/69653102_677094426100193_1832024570027015173_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/71015122_395690041149274_7247185378344485157_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/67714303_222406215393477_3190475948569731353_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/68664806_482221075889744_3439619948758902567_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/image55.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/68725402_133892047894585_1898710413583345273_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/69273475_2378843415729366_5788113816406162341_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_video_72313518_2306647179649907_8316214211311294118_n.MP4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_video_72355260_511296239657124_2108135843424844691_n%20(1).MP4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_video_72454022_172786823893290_3108950107624461485_n.MP4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/83897406_820420331719245_7034001980915391812_n%20(1).jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screen%20Shot%202022-08-18%20at%202.46.38%20PM.png'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/83897406_820420331719245_7034001980915391812_n%20(1).jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand</label>
+                                <label class="client-label"> Romeo Hunte</label>
+                            </div>
+                        </div>
+
+
+                          <div class="overview_project all Talent" onclick="openProject('E! News NYFW VIPs', ' Managed the E! Influencer Booth relations for Samirah Raheem, Sons of Sonix, Myriam Lumpini, etc during NYFW.', 'Talent Relations', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/48363109_371434330329002_3892464483100000256_n.png','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/48371481_371434696995632_84614029712031744_o.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_2974.MOV','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screen%20Shot%202019-07-28%20at%204.47.40%20PM.png','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/rs_540x960-200212084518-ExNYFW_AndeleLara.gif','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/rs_540x960-200212084609-ExNYFW_BriSteves.gif'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/rs_540x960-200212084609-ExNYFW_BriSteves.gif');"></div>
+                            <div class="overview_project_title">
+                                <label> Talent </label>
+                                <label class="client-label">E! NYFW Influencer Booth</label>
+                            </div>
+                        </div>
+
+                        <div class="overview_project all Talent" onclick="openProject('Rolling Stones India: Beyond the Border', 'Press for his two-part album,The Arrival.', 'Talent Relations', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screenshot%202026-08-25%20at%206.50.27%E2%80%AFPM.png','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screenshot%202026-08-25%20at%207.05.29%E2%80%AFPM.png', 'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screen%20Shot%202019-07-28%20at%204.44.29%20PM.png', 'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_2971.JPG','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_3524.JPG','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_3835.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/image01.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screenshot%202026-08-25%20at%206.50.27%E2%80%AFPM.png');"></div>
+                            <div class="overview_project_title">
+                                <label>Talent</label>
+                                <label class="client-label">Press Placements </label>
+                            </div>
+                        </div>
+
+                        <div class="overview_project all Brand" onclick="openProject('Air Max 270s: HOPE', 'Produced rollout for product. In collaboration with Playboy Club NYC and Nike by You, we produced an experiential activation including live art, Y2K Game systems station, Lock and Key remedies giftbags, and open bar.', 'Project Manager and Producer', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/hope.mov','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/NikeByKadeem%20x%20Cultivator%20Release%20Event%20(Clean).mp4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/HOPE%2010.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/HOPE%202.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/SaveInsta.App%20-%202136528880926745199_12600156.MP4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_29022_3799866.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Copy%20of%20Karen%20P%20Portfolio%20%20(1).png','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_29022_3800072.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/u6o3ZEdA.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_29022_3799919.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_29022_3799866.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand </label>
+                                <label class="client-label">Nike, Playboy Club NYC</label>
+                            </div>
+                        </div>
+
+                        <div class="overview_project all Brand" onclick="openProject(' Americans in Paris Recap', 'Following cancellation of their production company, I tapped my international network for last minute video content capture for for the CFDA in Paris showroom. I was handling fashion relations for actor Ryan Jamaal Swain (Pose). This shoot followed after initially working with the CFDA for a shoot featuring Ryan, for the brand, NIHL.', 'Content Producer / Project Manager', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Ryan%20CFDA%20IG%20Stories.mp4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/image51.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/cfdaaip1.mp4'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screen%20Shot%202022-08-16%20at%201.51.00%20PM.png');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand</label>
+                                <label class="client-label"> CFDA x Vogue </label>
+                            </div>
+                        </div>
+
+                                <div class="overview_project all Brand" onclick="openProject('Tommy Campaign', 'Talent and culture consultant', 'Talent Relations', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/tommy.mp4'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Copy%20of%20Karen%20P%20Portfolio%20.png');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand</label>
+                                <label class="client-label">Tommy Hilfiger</label>
+                            </div>
+                        </div>
+
+ <div class="overview_project all Creative" onclick="openProject('Heron Preston x Lonely Whale', 'Managed content for an experiential Art Basel exhibit dedicated to plastic pollution and environmental sustainability.', 'Content Producer', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/75602204_2371633629816487_1568529550692662861_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/DSC09803.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/92290871_257509285290488_7834996533352866940_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/DSC08793.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/image06-1.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/75472294_465199600851040_2057037148131363091_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/75439570_137945874296869_2179562053830937994_n.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/92290871_257509285290488_7834996533352866940_n.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand </label>
+                                <label class="client-label">Museum of Plastic</label>
+                            </div>
+                        </div>
+
+                         <div class="overview_project all Partnership Experiential" onclick="openProject('Sunday with Samirah', 'Managed the creative production and the launch of the apparel collaboration, including a day of workshops focused on body positivity and self-awareness, including lunch and a curated panel of speakers, Samirah Raheem, DJ Kitty Cash, Ro.Lexx, and proceeds donated to the Amazing Grace Conservatory (AGC) in LA', 'Project Manager', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/67832999_505011293637971_7732492307483590656_o.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/54511391_321992701788666_1519865977291899950_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/52676858_994442804095141_1316129840758110283_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screen%20Shot%202019-07-28%20at%205.05.51%20PM.png','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/42f185f8.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/72340022.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/52676858_994442804095141_1316129840758110283_n.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Brand</label>
+                                <label class="client-label">CHNGE x Amazing Grace Conservatory Sunday with Samirah</label>
+                            </div>
+                        </div>
+
+                                <div class="overview_project all Talent" onclick="openProject('Philipp Plein x Steve Aoki', 'Coordinated talent integration for DJ Steve Aoki following the Philipp Plein presentation.', 'Talent Relations', 'https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/C%CC%A7OIS%20Agency%20Fashion%20Week.png')">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/35000549_207346633320814_8223002560806518784_n.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Talent</label>
+                                <label class="client-label">Steve Aoki x Philipp Plein</label>
+                            </div>
+                        </div>
+
+                                                <div class="overview_project all Talent" onclick="openProject('Ryan Fashion Relationships', 'Managed actor Ryan Jamaal Swain for the NIHL runway/showroom feature, along with NY and Paris fashion week relationships with brands like Thom Browne.', 'Talent Relations', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/53651310_2260089217564140_1721834861204865024_n.mp4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/121480338_969851090185938_2456889131435779233_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/135716820_851448352283706_5128111428658698426_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/53651310_2260089217564140_1721834861204865024_n.mp4'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/135716820_851448352283706_5128111428658698426_n.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Talent</label>
+                                <label class="client-label">Ryan Jamaal Swain  </label>
+                            </div>
+                        </div>
+
+                                                    <div class="overview_project all Talent" onclick="openProject('Biondo Fashion Relationships', 'Coordinated Biondo for appearances and front-row presence at Milan Fashion Week.', 'Talent Relations', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/71185344_486206805547694_7956266177322653394_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/60081223_345167512815183_5361920760350596681_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/69272497_396350924411095_7411269601860220010_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/70008226_732936393823298_4668368118258104713_n.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/69272497_396350924411095_7411269601860220010_n.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Talent</label>
+                                <label class="client-label"> Biondo </label>
+                            </div>
+                        </div>
+
+                        <div class="overview_project all Talent" onclick="openProject('Angelus Paint x BillyABSTRACT', 'Coordinated the production of a sneaker customization tutorial and the global Vans Old Skool giveaway.', 'Talent Relations', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/angelus.mp4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/hqdefault.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_20170404_195010_374.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/image.png','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/image47.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/image48.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_20181126_012455_762.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_20190117_174330_545.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/hqdefault.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Talent</label>
+                                <label class="client-label">BillyABSTRACT </label>
+                            </div>
+                        </div>
+
+
+                        <div class="overview_project all Talent" onclick="openProject('Projects Secured for Samirah', ' Including a monthly advice column Samirah Says on the Girlboss platform, rebag influencer campaigns,etc.', 'Talent Relations', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_video_8144266FF248B97ADD37966025896C86_video_dashinit.MP4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_video_C6424D1784C6D1C946BF4D8CA7649586_video_dashinit.MP4','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/60118857_571871616668396_4460383901894273272_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/54514023_391074341727340_4677553832812529491_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/48374801_371422576996844_2017319003327823872_o.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/64477746_2769331446472029_647451447591461685_n.jpg'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/64477746_2769331446472029_647451447591461685_n.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label>Talent</label>
+                                <label class="client-label">Samirah Raheem</label>
+                            </div>
+                        </div>
+
+                        <div class="overview_project all Talent" onclick="openProject('Koche (Models Walk)', 'Secured influencer model placements for DJ Kitty Cash, Samirah Raheem, DJ Ohso and Rickey Thompson', 'Casting Support', ['https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/67377524_505007120305055_3587806831998664704_o.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/2172980-800w.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_41643701_1943699749271462_591472038244846589_n_1080.JPG','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Snapinsta.app_308314104_1113035979418540_7170170468384900181_n_1080.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/image54.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/IMG_1879.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/275417415_383545863192231_3636975876922284305_n.jpg','https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screen%20Shot%202019-07-28%20at%204.45.14%20PM.png'])">
+                            <div class="overview_project_image_div" style="background-image:url('https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/48374801_371422576996844_2017319003327823872_o.jpg');"></div>
+                            <div class="overview_project_title">
+                                <label> Talent</label>
+                                <label class="client-label"> Runway Placements GCDS SS19, Koche Pre-FW19, SS20, AW22 </label>
+                            </div>
+                        </div>                        
+                
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <div class="footer-left">
+© 2026 By Karen Predestin. All Rights Reserved.
+        <a href="https://karenpredestin.com" target="_blank">karenpredestin.com</a> 
+        <a href="https://www.digitalefemme.org" target="_blank">Digitale Femme</a>    
+        <a href="mailto:karen@karenfrancois.com" target="_blank">Email</a> 
+ 
+        <!-- BOTTOM ICON -->
+    
+  
+
+    </div>
+    
+       <script>
+        // Open Info Overlay
+        function showSection(id) {
+            document.getElementById(id).classList.add('active');
+            document.getElementById('nav-info').classList.add('active');
+        }
+
+        // Close Info Overlay
+        function closeInfo() {
+            document.getElementById('info-section').classList.remove('active');
+            document.getElementById('nav-info').classList.remove('active');
+        }
+
+    </script>
+    <script>
+    const filterLinks = document.querySelectorAll('.project_categories li');
+    const projects = document.querySelectorAll('.overview_project');
+
+    filterLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            filterLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+
+            const category = link.getAttribute('data-slug');
+            projects.forEach(proj => {
+                if (category === 'all' || proj.classList.contains(category)) {
+                    proj.style.display = 'block';
+                } else {
+                    proj.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+    <script>
+               // OVERLAY LOGIC
+       let currentSlide = 0;
+let currentMedia = [];
+
+function openProject(title, meta, role, media) {
+    document.getElementById('ov-title').innerText = title;
+    document.getElementById('ov-meta').innerText = meta;
+    document.getElementById('ov-role').innerText = role;
+
+    // media can be a single URL string, or an array of URLs
+    currentMedia = Array.isArray(media) ? media : [media];
+    currentSlide = 0;
+    renderSlides();
+
+    const overlay = document.getElementById('project-overlay');
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function renderSlides() {
+    const container = document.getElementById('ov-slides');
+    const dots = document.getElementById('slide-dots');
+    container.innerHTML = '';
+    dots.innerHTML = '';
+
+    currentMedia.forEach((url, i) => {
+        const isVideo = url.match(/\.(mp4|webm|mov)$/i);
+        let el;
+        if (isVideo) {
+            el = document.createElement('video');
+            el.src = url;
+            el.controls = true;
+        } else {
+            el = document.createElement('img');
+            el.src = url;
+        }
+        el.className = i === currentSlide ? 'active' : '';
+        container.appendChild(el);
+
+        const dot = document.createElement('span');
+        dot.className = i === currentSlide ? 'active' : '';
+        dot.onclick = () => { currentSlide = i; renderSlides(); };
+        dots.appendChild(dot);
+    });
+
+    // Hide arrows/dots if only one item
+    const showNav = currentMedia.length > 1;
+    document.querySelector('.slide-prev').style.display = showNav ? 'flex' : 'none';
+    document.querySelector('.slide-next').style.display = showNav ? 'flex' : 'none';
+    document.getElementById('slide-dots').style.display = showNav ? 'block' : 'none';
+}
+
+function changeSlide(direction) {
+    currentSlide = (currentSlide + direction + currentMedia.length) % currentMedia.length;
+    renderSlides();
+}
+
+function closeProject() {
+    document.getElementById('project-overlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+    // pause any playing video
+    document.querySelectorAll('#ov-slides video').forEach(v => v.pause());
+       
+            
+        };
+    </script>
+
+</body>
+</html>
