@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karen François — Home</title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=EB+Garamond:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+       
+
+        :root {
+            --bg: #ffffff;
+            --ink: #000000;
+            --grey-text: #717482;
+            --dim: #e0e0e0; 
+             --unit: 1vmin; 
+        }
+
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: "Inter", sans-serif;
+            overflow: hidden;
+        }
+
+        .font-walden { font-family: "EB Garamond", serif; }
+
+        
+        /* --- HEADER NAV --- */
+        .main_menu {
+            padding: 24px 30px;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 500;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            box-sizing: border-box;
+             /* Keeps links to the right */
+        }
+        .main_menu .main-nav { list-style: none; display: flex; gap: 25px; padding: 0; margin: 0; }
+        .main_menu .main-nav li a {
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .main_menu .main-nav li a:hover, .main_menu .main-nav li a.active { opacity: 1; }
+
+        /* --- BIO & NAME POSITIONING  --- */
+        .header-content {
+            position: absolute;
+            top: 40px;
+            left: 30px;
+            display: flex;
+            gap: 300px;
+            z-index: 50;
+            align-items: right;
+            box-sizing: border-box;
+            text-align: justify;
+           
+            
+        }
+        .branding-name { font-weight: 500; font-size: px; white-space: nowrap; }
+        
+        .bio-container { max-width: 550px; }
+        .bio-text { 
+            font-size: 14px; 
+            line-height: 1.4; 
+            color: var(--ink);
+            margin-bottom: 25px;
+        }
+
+        /* --- RIGHT SECTION --- */
+        .featured-wrap {
+   
+    top: 30px; /* Aligning it vertically with where your project list starts */
+    right: 30px; /* Anchored to the right edge */
+    text-align: right;
+    z-index: 50;
+    width: auto;
+    position: relative;
+     /* Giving it a set width to prevent overlapping */
+}
+        
+        .featured-label {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .featured-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .featured-list li a {
+            font-size: 11px;
+            color: var(--dim);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 2px;
+            transition: color 0.3s;
+        }
+        .featured-list li a:hover { color: var(--grey-text); }
+
+        /* --- MAIN LAYOUT GRID --- */
+        .main-layout {
+            display: grid;
+   grid-template-columns: 1fr 1fr; /* two columns: list on the left, image on the right */
+    height: 100vh;
+    padding: 140px 60px 40px 45px;
+    box-sizing: border-box;
+    overflow: hidden;
+        }
+
+        /* --- LEFT PROJECT LIST --- */
+        .list-label {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--ink);
+        }
+        .project-item {
+            font-family: "EB Garamond", serif;
+            font-size: 35px;
+            line-height: 1;
+            color: var(--dim);
+            cursor: pointer;
+            transition: color 0.4s ease;
+            margin-bottom: 5px;
+             white-space: nowrap;
+        }
+        .project-item:hover, .project-item.active { color: var(--ink); }
+
+        /* --- IMAGE PREVIEW --- */
+        .preview-area {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .preview-img {
+            position: absolute;
+            max-width: 450px;
+            width: 80%;
+              height: 60vh;
+            opacity: 0;
+             object-fit: contain; 
+              visibility: hidden;
+            transform: translateY(100px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+               pointer-events: none;
+        }
+        .preview-img.visible { opacity: 1;  transform: translateY(0); }
+
+         #info-section { 
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff; 
+            z-index: 900; /* Sits below Nav but above Work */
+            padding: 40px 45px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        #info-section.active {
+            display: block;
+        }
+
+        .info-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; 
+            gap: 60px; 
+            align-items: start;
+        }
+        .close-btn {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 40px;
+            display: inline-block;
+            border-bottom: 1px solid black;
+        }
+        
+        /* --- DECORATIVE & FOOTER --- */
+        .bottom-icon-container { position: fixed; bottom: 720px; right: 200px; width: 180px;  height: 200px; z-index: 20; background: transparent;
+            }
+
+         .bottom-icon-container iframe { width: 440%; height: 770%; border: none; overflow: hidden;
+        }    
+        .footer-left { position: fixed; bottom: 2vh; left: 30px; font-size: 10px; color: #bbb; letter-spacing: 0.1em; }
+
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <header class="main_menu">
+        <ul class="main-nav">
+            <li><a onclick="showSection('info-section')" id="nav-info">Info</a></li>
+            <li><a href="work.html" >ÇOIS</a></li>
+        
+        
+        </ul>
+    </header>
+
+    <!-- BRANDING & BIO -->
+    <div class="header-content">
+        <div class="branding-name">Karen François</div>
+        <div class="bio-container">
+            <div class="bio-text">
+                <br> 
+                <br> 
+               <br><br> Karen is a creative producer and cultural consultant working at the intersection of lifestyle, community, and culture. She develops structures and strategies to help transform ideas into actual campaigns, digital media, events, platforms, or businesses that can be researched, designed, produced, experienced, and transformed. 
+            </div>
+
+          
+        </div>
+    </div>
+
+     <!-- SECTION: INFO OVERLAY -->
+    <section id="info-section" class="website_section">
+        <div class="close-btn" onclick="closeInfo()">Close</div> <br>
+        <div class="info-grid">
+            <div class="info-body" style="font-family: 'EB Garamond'; font-size: 15px; line-height: 1.1; text-align: justify;">
+               <br><br><br><br><br>
+                 Karen makes ideas operational; <br><br> She is the multidisciplinary builder bringing people, ideas, resources, and systems together to make things happen. With over eight years of entrepreneurial experience and deep cultural intelligence, she understands that creative work doesn't exist in a vacuum—it requires infrastructure, people, money, logistics, relationships, timing, and strategy. <br><br> Karen understands the relationship between creativity and execution. Today, she continues to remain curious about how organizations participate in culture and how culture can change organizations, while supporting brands and talent, connecting multiple disciplines and stakeholders to get the resulting project produced. Her ventures continue to center on building creative ecosystems, developing strategic partnerships, and creating the structures through which emerging cultural practices can grow and connect.
+
+ <br>
+            
+            </div>
+            <div class="info-body-text" style="font-size: 12px; line-height: 1.6; color: var(--ink); text-align: justify;">
+<strong>Ventures</strong>  <br><br>
+ÇOIS Agency was a cultural strategy and creative production consultancy helping brands and creative talent navigate cultural markets, understand audiences and create culturally relevant opportunities from 2019-2023. Working across fashion, luxury, lifestyle, media, and the arts, she developed a distinct practice using creativity, art history, cultural research, storytelling, design, music, fashion, and relationships as tools for producing cultural outcomes.
+ <br><br>
+Drawing on her entrepreneurial background and culturally informed approach, Karen is currently developing Digitale Femme, an ecosystem for women and nonbinary artists, designers, and creative practitioners working across digital art, sound, technology, design, and emerging media to find local communities and exchange resources. It supports emerging and self-directed practitioners navigating traditional and nontraditional paths— from recent graduates and independent learners to those entering creative fields later in life, people navigating structural or geographic barriers to creative participation, transitioning from other careers or industries, or rebuilding their practices after major life and professional transitions. The creative infrastructure is about bringing people, ideas, resources, and systems together to make things happen and build sustainable creative lives.
+        
+    
+              
+             </div>
+
+                  <!--PIC -->
+     <div class="portrait-img" style="width: 100%; height: auto;  display: block; margin: 0 auto; margin-top: 80px; border-radius: 1px">
+    <div class="portrait-wrapper" style="font-size: 12px; line-height: 1.6; color: var(--ink); text-align: justify;">
+        <img src="https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/museum.jpeg" class="portrait-img" alt="Karen Portrait">
+    <p class="portrait-caption">
+         <br> Karen practices artistically as Karen Predestin, a multidisciplinary artist and experimental practitioner exploring culture, new forms of expression and connection through technology, memory, identity, curation and new forms of storytelling. She works across 3D fabrication, creative coding, sound, spatial design, photography, video, writing, music, and archival research to develop new ways of preserving, interpreting, and experiencing cultural knowledge. You can find more about her work at <a href="https://www.karenpredestin.com" class="underline">karenpredestin.com</a> ☺︎
+
+    </p>
+    </div>
+</div>
+    </section>
+
+    <!-- MAIN GRID -->
+    <main class="main-layout">
+        
+        <!-- Left: List -->
+        <div class="project-list-container">
+            <br><br><br><br><br>
+            <div class="list-label">Multi-disciplinary Builder</div>
+            <div class="space-y-1">
+                
+                <div class="project-item" data-target="img1">Project Manager</div>
+                <div class="project-item" data-target="img2">Creative Producer</div>
+                <div class="project-item" data-target="img3">Talent Relations</div>
+                <div class="project-item" data-target="img4">Culture Consultant</div>
+                <div class="project-item" data-target="img5">Experiential Producer</div>
+            </div>
+        </div>
+
+        <!-- Center: Image Preview -->
+        <div class="preview-area">
+            <img id="img1" class="preview-img" src="https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/DSC09803.jpg">
+            <img id="img2" class="preview-img" src="https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/Screenshot%202023-10-23%20at%2010.39.00%20PM.png">
+            <img id="img3" class="preview-img" src="https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/1703f0f9-8167-4dd7-8fa6-1ed3855d1e94.JPG">
+            <img id="img4" class="preview-img" src="https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_34216_4660739.jpg">
+            <img id="img5" class="preview-img" src="https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/wl_29022_3799866.jpg">
+            <img id="img7" class="preview-img" src="https://static.photos/fashion/800/800/26">
+            <img id="img8" class="preview-img" src="https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/NED1.mp47">
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <div class="footer-left">
+© 2026 By Karen Predestin. All Rights Reserved.
+        <a href="https://karenpredestin.com" target="_blank">karenpredestin.com</a> 
+        <a href="https://www.digitalefemme.org" target="_blank">Digitale Femme</a>    
+        <a href="mailto:karen@karenfrancois.com" target="_blank">Email</a> 
+ 
+        <!-- BOTTOM ICON -->
+    
+     <div class="bottom-icon-container">
+<iframe src=""></iframe>
+
+    </div>
+    
+    <script>
+        // Open Info Overlay
+        function showSection(id) {
+            document.getElementById(id).classList.add('active');
+            document.getElementById('nav-info').classList.add('active');
+        }
+
+        // Close Info Overlay
+        function closeInfo() {
+            document.getElementById('info-section').classList.remove('active');
+            document.getElementById('nav-info').classList.remove('active');
+        }
+
+    </script>
+    
+    <script>
+        const items = document.querySelectorAll('.project-item');
+        const previews = document.querySelectorAll('.preview-img');
+
+        items.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                items.forEach(i => i.classList.remove('active'));
+                previews.forEach(p => p.classList.remove('visible'));
+
+                item.classList.add('active');
+                const target = item.getAttribute('data-target');
+                document.getElementById(target).classList.add('visible');
+            });
+            item.addEventListener('mouseleave', () => {
+                items.forEach(i => i.classList.remove('inactive'));
+                previews.forEach(p => p.classList.remove('visible'));
+            });
+        });
+
+      
+    </script>
+</body>
+</html>
