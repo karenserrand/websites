@@ -61,6 +61,37 @@
         }
         .main_menu .main-nav li a:hover, .main_menu .main-nav li a.active { opacity: 1; }
 
+        /* --- DROPDOWN STYLES --- */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0; /* Aligns dropdown to the right since nav is on the right */
+            background-color: var(--bg);
+            min-width: 140px;
+            z-index: 1000;
+            padding-top: 10px;
+            text-align: right;
+        }
+
+        .dropdown-content li {
+            margin-bottom: 8px;
+        }
+
+        .dropdown-content li a {
+            display: block;
+            padding: 5px 0;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
         /* --- BIO & NAME POSITIONING  --- */
         .header-content {
             position: absolute;
@@ -219,7 +250,12 @@
     <header class="main_menu">
         <ul class="main-nav">
             <li><a onclick="showSection('info-section')" id="nav-info">Info</a></li>
-            <li><a href="work.html" >ÇOIS</a></li>
+ <li class="dropdown">
+ <a href="#" class="active">Ventures</a>
+                <ul class="dropdown-content">
+                    <li><a href="work.html">ÇOIS</a></li>
+                    <!-- You can add more ventures here -->
+                    <li><a href="https://www.digitalefemme.org" target="_blank">Digitale Femme</a></li>            
         
         
         </ul>
@@ -265,7 +301,7 @@ Drawing on her entrepreneurial background and culturally informed approach, Kare
     <div class="portrait-wrapper" style="font-size: 12px; line-height: 1.6; color: var(--ink); text-align: justify;">
         <img src="https://pub-8dffa097ebea431a8746ebbbb676a462.r2.dev/museum.jpeg" class="portrait-img" alt="Karen Portrait">
     <p class="portrait-caption">
-         <br> Karen practices artistically as Karen Predestin, a multidisciplinary artist and experimental practitioner exploring culture, new forms of expression and connection through technology, memory, identity, curation and new forms of storytelling. She works across 3D fabrication, creative coding, sound, spatial design, photography, video, writing, music, and archival research to develop new ways of preserving, interpreting, and experiencing cultural knowledge. You can find more about her work at <a href="https://www.karenpredestin.com" class="underline">karenpredestin.com</a> ☺︎
+         <br> Karen practices artistically as Karen Predestin, a multidisciplinary artist and experimental practitioner exploring culture, new forms of expression and connection through technology, memory, identity, curation and new forms of storytelling. She works across 3D fabrication, creative coding, sound, spatial design, photography, video, writing, music, and archival research to develop new ways of preserving, interpreting, and experiencing cultural knowledge. She also consults as an art advisor. You can find more about her work at <a href="https://www.karenpredestin.com" class="underline">karenpredestin.com</a> ☺︎
 
     </p>
     </div>
